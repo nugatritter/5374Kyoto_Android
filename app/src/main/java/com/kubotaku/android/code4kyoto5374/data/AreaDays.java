@@ -5,43 +5,13 @@ import com.kubotaku.android.code4kyoto5374.util.AppUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * ごみの収集日の地区別情報クラス
  */
-public class AreaDays {
-
-    /**
-     * ごみ収集日クラス
-     * <p>
-     * 曜日と月の何周目かを表す
-     * </p>
-     */
-    public static class GarbageDays {
-        /**
-         * 週。-1のときは毎週
-         * <p>
-         * {@link java.util.Calendar#DAY_OF_WEEK_IN_MONTH}の値
-         * </p>
-         */
-        public int week;
-
-        /**
-         * 曜日
-         * <p>
-         * {@link java.util.Calendar#DAY_OF_WEEK}の値
-         * </p>
-         */
-        public int day;
-
-        @Override
-        public String toString() {
-            String s = AppUtil.convertDayOfWeekText(day);
-            if (week != -1) {
-                s += week;
-            }
-            return s;
-        }
-    }
+public class AreaDays extends RealmObject {
 
     /**
      * エリアマスタのID
@@ -61,22 +31,78 @@ public class AreaDays {
     /**
      * 燃やすごみの日
      */
-    public List<GarbageDays> burnableDays;
+    public RealmList<GarbageDays> burnableDays;
 
     /**
      * 缶、ビン、ペットボトルの日
      */
-    public List<GarbageDays> binDays;
+    public RealmList<GarbageDays> binDays;
 
     /**
      * プラごみの日
      */
-    public List<GarbageDays> plasticDays;
+    public RealmList<GarbageDays> plasticDays;
 
     /**
      * 資源ごみの日
      */
-    public List<GarbageDays> recycleDays;
+    public RealmList<GarbageDays> recycleDays;
+
+    public int getMasterAreaID() {
+        return masterAreaID;
+    }
+
+    public void setMasterAreaID(int masterAreaID) {
+        this.masterAreaID = masterAreaID;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCenterName() {
+        return centerName;
+    }
+
+    public void setCenterName(String centerName) {
+        this.centerName = centerName;
+    }
+
+    public RealmList<GarbageDays> getBurnableDays() {
+        return burnableDays;
+    }
+
+    public void setBurnableDays(RealmList<GarbageDays> burnableDays) {
+        this.burnableDays = burnableDays;
+    }
+
+    public RealmList<GarbageDays> getBinDays() {
+        return binDays;
+    }
+
+    public void setBinDays(RealmList<GarbageDays> binDays) {
+        this.binDays = binDays;
+    }
+
+    public RealmList<GarbageDays> getPlasticDays() {
+        return plasticDays;
+    }
+
+    public void setPlasticDays(RealmList<GarbageDays> plasticDays) {
+        this.plasticDays = plasticDays;
+    }
+
+    public RealmList<GarbageDays> getRecycleDays() {
+        return recycleDays;
+    }
+
+    public void setRecycleDays(RealmList<GarbageDays> recycleDays) {
+        this.recycleDays = recycleDays;
+    }
 
 
     @Override
@@ -148,8 +174,8 @@ public class AreaDays {
      * @param src 元データ
      * @return
      */
-    private static List<GarbageDays> parseGarbageDays(String src) {
-        List<GarbageDays> garbageDays = new ArrayList<>();
+    private static RealmList<GarbageDays> parseGarbageDays(String src) {
+        RealmList<GarbageDays> garbageDays = new RealmList<>();
 
         String[] sepEntity = src.split(" ");
         for (String entity : sepEntity) {

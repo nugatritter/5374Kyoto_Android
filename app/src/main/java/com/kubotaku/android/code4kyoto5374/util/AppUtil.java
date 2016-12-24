@@ -18,7 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by kubotaku1119 on 2016/12/24.
+ * Utilities.
  */
 
 public class AppUtil {
@@ -65,11 +65,21 @@ public class AppUtil {
     }
 
     public interface GitHubUserContent {
-        @GET("/{owner}/{repo}/master/{path}")
-        Call<String> getRawData(@Path("owner") String owner, @Path("repo") String repo, @Path("path") String path);
+        @GET("/{owner}/{repo}/{branch}/{path}")
+        Call<String> getRawData(@Path("owner") String owner, @Path("repo") String repo, @Path("branch") String branch, @Path("path") String path);
     }
 
-    public static String readFileFromGitHub(String owner, String repo, String path) throws Exception {
+    /**
+     * GitHubからファイルのRawデータを取得する
+     *
+     * @param owner  リポジトリオーナー名
+     * @param repo   リポジトリ名
+     * @param branch ブランチ名
+     * @param path   ファイルへのパス
+     * @return Rawデータ文字列
+     * @throws Exception
+     */
+    public static String readFileFromGitHub(String owner, String repo, String branch, String path) throws Exception {
 
         final Retrofit retrofit
                 = new Retrofit.Builder()
@@ -79,7 +89,7 @@ public class AppUtil {
 
         final GitHubUserContent service = retrofit.create(GitHubUserContent.class);
 
-        final Call<String> rawData = service.getRawData(owner, repo, path);
+        final Call<String> rawData = service.getRawData(owner, repo, branch, path);
 
         final Response<String> response = rawData.execute();
         if (!response.isSuccessful()) {

@@ -11,7 +11,7 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
- * Created by kubotaku1119 on 2016/12/24.
+ * StringConverter for Retrofit.
  */
 
 public class ToStringConverterFactory extends Converter.Factory {

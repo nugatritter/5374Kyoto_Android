@@ -1,9 +1,11 @@
 package com.kubotaku.android.code4kyoto5374.data;
 
+import io.realm.RealmObject;
+
 /**
  * 区域マスター情報クラス
  */
-public class AreaMaster {
+public class AreaMaster extends RealmObject {
 
     public int areaID;
 
