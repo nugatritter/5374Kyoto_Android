@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Code4Kyoto5374</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message_need_access_location">位置情報へのアクセス許可が必要です</string>
+    <string name="label_area_select_title">ごみの収集日を表示する地点を選択して下さい</string>
+    <string name="label_area_selected">選択された地域</string>
+    <string name="text_no_select">選択されていません</string>
+    <string name="text_select_area">地図で選択する</string>
 </resources>

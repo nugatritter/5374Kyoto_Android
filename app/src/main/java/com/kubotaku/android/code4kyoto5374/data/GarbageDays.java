@@ -27,6 +27,23 @@ public class GarbageDays extends RealmObject {
      */
     public int day;
 
+    /**
+     * 表示用の文字列に変換する
+     * <p>
+     * 毎週水曜日, 第３金曜日
+     * </p>
+     *
+     * @return
+     */
+    public String toViewString() {
+        final String dayOfWeek = AppUtil.convertDayOfWeekText(day) + "曜日";
+        if (week == -1) {
+            return "毎週" + dayOfWeek;
+        } else {
+            return "第" + week + dayOfWeek;
+        }
+    }
+
     @Override
     public String toString() {
         String s = AppUtil.convertDayOfWeekText(day);

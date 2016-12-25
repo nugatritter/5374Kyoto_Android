@@ -3,4 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- ごみ収集日のテキスト色 -->
+    <color name="text_garbage_type">#FFFFFF</color>
+    <!-- ごみ収集日の各背景色 -->
+    <!-- 燃やすごみ -->
+    <color name="color_burnable">#EA3B13</color>
+    <!-- プラスチック製容器と包装 -->
+    <color name="color_plastic">#733B96</color>
+    <!-- 缶・ビン・ペットボトル -->
+    <color name="color_bin">#77AE1F</color>
+    <!-- 小型金属類 -->
+    <color name="color_small">#2DC7AA</color>
 </resources>

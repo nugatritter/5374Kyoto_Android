@@ -44,9 +44,9 @@ public class AreaDays extends RealmObject {
     public RealmList<GarbageDays> plasticDays;
 
     /**
-     * 資源ごみの日
+     * 小型金属の日
      */
-    public RealmList<GarbageDays> recycleDays;
+    public RealmList<GarbageDays> smallDays;
 
     public int getMasterAreaID() {
         return masterAreaID;
@@ -96,14 +96,45 @@ public class AreaDays extends RealmObject {
         this.plasticDays = plasticDays;
     }
 
-    public RealmList<GarbageDays> getRecycleDays() {
-        return recycleDays;
+    public RealmList<GarbageDays> getSmallDays() {
+        return smallDays;
     }
 
-    public void setRecycleDays(RealmList<GarbageDays> recycleDays) {
-        this.recycleDays = recycleDays;
+    public void setSmallDays(RealmList<GarbageDays> smallDays) {
+        this.smallDays = smallDays;
     }
 
+    public String toInfoString() {
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("収集センター : \n");
+        sb.append("  " + centerName + "\n");
+        sb.append("燃やすごみ : \n");
+        for (GarbageDays d : burnableDays) {
+            sb.append("  " + d.toString() + " ");
+        }
+        sb.append("\n");
+
+        sb.append("缶・ビン・ペットボトル : \n");
+        for (GarbageDays d : binDays) {
+            sb.append("  " + d.toString() + " ");
+        }
+        sb.append("\n");
+
+        sb.append("プラスチック製容器包装 : \n");
+        for (GarbageDays d : plasticDays) {
+            sb.append("  " + d.toString() + " ");
+        }
+        sb.append("\n");
+
+        sb.append("小型金属類 : \n");
+        for (GarbageDays d : smallDays) {
+            sb.append("  " + d.toString() + " ");
+        }
+        sb.append("\n");
+
+        return sb.toString();
+    }
 
     @Override
     public String toString() {
@@ -134,7 +165,7 @@ public class AreaDays extends RealmObject {
         sb.append("\n");
 
         sb.append("  資源ごみ : ");
-        for (GarbageDays d : recycleDays) {
+        for (GarbageDays d : smallDays) {
             sb.append(d.toString() + " ");
         }
         sb.append("\n");
@@ -160,7 +191,7 @@ public class AreaDays extends RealmObject {
         areaDays.burnableDays = parseGarbageDays(sepEntity[3]);
         areaDays.binDays = parseGarbageDays(sepEntity[4]);
         areaDays.plasticDays = parseGarbageDays(sepEntity[5]);
-        areaDays.recycleDays = parseGarbageDays(sepEntity[6]);
+        areaDays.smallDays = parseGarbageDays(sepEntity[6]);
 
         return areaDays;
     }

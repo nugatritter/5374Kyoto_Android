@@ -1,5 +1,11 @@
 package com.kubotaku.android.code4kyoto5374.data;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.content.res.AppCompatResources;
+
+import com.kubotaku.android.code4kyoto5374.R;
+
 import io.realm.RealmObject;
 
 /**
@@ -185,5 +191,39 @@ public class GarbageType extends RealmObject {
         }
 
         return garbageType;
+    }
+
+    public static String getViewText(final int type) {
+        switch (type) {
+            case TYPE_BURNABLE:
+                return "燃やすごみ";
+
+            case TYPE_BIN:
+                return "缶 ビン ペットボトル";
+
+            case TYPE_SMALL:
+                return "小型金属";
+
+            case TYPE_PLASTIC:
+                return "プラスチック製容器包装";
+        }
+        return "";
+    }
+
+    public static int getViewColor(final Context context, final int type) {
+        switch (type) {
+            case TYPE_BURNABLE:
+                return ContextCompat.getColor(context, R.color.color_burnable);
+
+            case TYPE_BIN:
+                return ContextCompat.getColor(context, R.color.color_bin);
+
+            case TYPE_SMALL:
+                return ContextCompat.getColor(context, R.color.color_small);
+
+            case TYPE_PLASTIC:
+                return ContextCompat.getColor(context, R.color.color_plastic);
+        }
+        return 0;
     }
 }
