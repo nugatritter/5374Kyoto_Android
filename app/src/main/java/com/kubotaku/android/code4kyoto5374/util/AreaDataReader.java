@@ -52,7 +52,9 @@ public class AreaDataReader {
             areaDaysList = new ArrayList<>();
             for (int index = 1; index < sepAreaDays.length; index++) { // 1行目はヘッダー
                 final AreaDays areaDays = AreaDays.create(sepAreaDays[index]);
-                areaDaysList.add(areaDays);
+                if (areaDays != null) {
+                    areaDaysList.add(areaDays);
+                }
             }
 
         } catch (Exception e) {

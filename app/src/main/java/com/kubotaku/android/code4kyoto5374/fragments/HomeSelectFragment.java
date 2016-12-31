@@ -101,13 +101,12 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final FragmentActivity activity = getActivity();
-        if (activity != null && activity instanceof OnPermissionRequestListener) {
-            onPermissionRequestListener = (OnPermissionRequestListener) activity;
+        if (context instanceof OnPermissionRequestListener) {
+            onPermissionRequestListener = (OnPermissionRequestListener) context;
         }
 
-        if (activity != null && activity instanceof OnCloseFragmentListener) {
-            onCloseFragmentListener = (OnCloseFragmentListener) activity;
+        if (context instanceof OnCloseFragmentListener) {
+            onCloseFragmentListener = (OnCloseFragmentListener) context;
         }
     }
 

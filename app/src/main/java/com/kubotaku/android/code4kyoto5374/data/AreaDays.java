@@ -104,6 +104,31 @@ public class AreaDays extends RealmObject {
         this.smallDays = smallDays;
     }
 
+    /**
+     * 指定したごみ種別の収集日リストを取得する
+     *
+     * @param garbageType ごみ種別
+     * @return 収集日リスト
+     */
+    public List<GarbageDays> getTargetGarbageDays(final int garbageType) {
+        switch (garbageType) {
+            default:
+                return null;
+
+            case GarbageType.TYPE_BURNABLE:
+                return burnableDays;
+
+            case GarbageType.TYPE_PLASTIC:
+                return plasticDays;
+
+            case GarbageType.TYPE_SMALL:
+                return smallDays;
+
+            case GarbageType.TYPE_BIN:
+                return binDays;
+        }
+    }
+
     public String toInfoString() {
         final StringBuilder sb = new StringBuilder();
 
@@ -180,20 +205,26 @@ public class AreaDays extends RealmObject {
      * @return
      */
     public static AreaDays create(String src) {
-        final AreaDays areaDays = new AreaDays();
+        try {
+            final AreaDays areaDays = new AreaDays();
 
-        String[] sepEntity = src.split(",");
+            String[] sepEntity = src.split(",");
 
-        areaDays.masterAreaID = Integer.parseInt(sepEntity[0]);
-        areaDays.areaName = sepEntity[1];
-        areaDays.centerName = sepEntity[2];
+            areaDays.masterAreaID = Integer.parseInt(sepEntity[0]);
+            areaDays.areaName = sepEntity[1];
+            areaDays.centerName = sepEntity[2];
 
-        areaDays.burnableDays = parseGarbageDays(sepEntity[3]);
-        areaDays.binDays = parseGarbageDays(sepEntity[4]);
-        areaDays.plasticDays = parseGarbageDays(sepEntity[5]);
-        areaDays.smallDays = parseGarbageDays(sepEntity[6]);
+            areaDays.burnableDays = parseGarbageDays(sepEntity[3]);
+            areaDays.binDays = parseGarbageDays(sepEntity[4]);
+            areaDays.plasticDays = parseGarbageDays(sepEntity[5]);
+            areaDays.smallDays = parseGarbageDays(sepEntity[6]);
 
-        return areaDays;
+            return areaDays;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**

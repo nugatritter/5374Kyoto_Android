@@ -1,18 +1,21 @@
 package com.kubotaku.android.code4kyoto5374.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.text.Text;
 import com.kubotaku.android.code4kyoto5374.R;
+import com.kubotaku.android.code4kyoto5374.data.Alarm;
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
 import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
 import com.kubotaku.android.code4kyoto5374.data.GarbageType;
@@ -30,7 +33,8 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GarbageCollectDaysFragment extends Fragment {
+public class GarbageCollectDaysFragment extends Fragment
+        implements OnDismissDialogFragmentListener {
 
     public static final String TAG = GarbageCollectDaysFragment.class.getSimpleName();
 
@@ -49,6 +53,8 @@ public class GarbageCollectDaysFragment extends Fragment {
     }
 
     private Realm realm;
+
+    private GarbageCollectDaysAdapter garbageCollectDaysAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +87,10 @@ public class GarbageCollectDaysFragment extends Fragment {
 
     private void loadAreaDays() {
 
-        final HomePlace homePlace = Prefs.loadHomePlace(getContext());
+        garbageCollectDayList.clear();
+
+        final Context context = getContext();
+        final HomePlace homePlace = Prefs.loadHomePlace(context);
 
         final int masterID = homePlace.areaMasterID;
         final String areaName = homePlace.areaName;
@@ -98,25 +107,25 @@ public class GarbageCollectDaysFragment extends Fragment {
             final GarbageCollectDay burnable = new GarbageCollectDay();
             burnable.type = GarbageType.TYPE_BURNABLE;
             burnable.days = areaDays.burnableDays;
-            burnable.alarm = null;
+            burnable.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_BURNABLE);
             garbageCollectDayList.add(burnable);
 
             final GarbageCollectDay plastic = new GarbageCollectDay();
             plastic.type = GarbageType.TYPE_PLASTIC;
             plastic.days = areaDays.plasticDays;
-            plastic.alarm = null;
+            plastic.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_PLASTIC);
             garbageCollectDayList.add(plastic);
 
             final GarbageCollectDay bin = new GarbageCollectDay();
             bin.type = GarbageType.TYPE_BIN;
             bin.days = areaDays.binDays;
-            bin.alarm = null;
+            bin.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_BIN);
             garbageCollectDayList.add(bin);
 
             final GarbageCollectDay small = new GarbageCollectDay();
             small.type = GarbageType.TYPE_SMALL;
             small.days = areaDays.smallDays;
-            small.alarm = null;
+            small.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_SMALL);
             garbageCollectDayList.add(small);
         }
     }
@@ -125,8 +134,21 @@ public class GarbageCollectDaysFragment extends Fragment {
         final View view = getView();
 
         final ListView listView = (ListView) view.findViewById(R.id.list_collect_days);
-        final GarbageCollectDaysAdapter adapter = new GarbageCollectDaysAdapter();
-        listView.setAdapter(adapter);
+        garbageCollectDaysAdapter = new GarbageCollectDaysAdapter();
+        listView.setAdapter(garbageCollectDaysAdapter);
+        listView.setOnItemSelectedListener(onItemSelectedListener);
+        listView.setOnItemClickListener(onItemClickListener);
+    }
+
+    @Override
+    public void onDismissDialog(boolean needUpdate) {
+        if (needUpdate) {
+            loadAreaDays();
+
+            if (garbageCollectDaysAdapter != null) {
+                garbageCollectDaysAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     // -----------------------------
@@ -134,10 +156,30 @@ public class GarbageCollectDaysFragment extends Fragment {
     private static final class GarbageCollectDay {
         int type;
         List<GarbageDays> days;
-        Date alarm;
+        Alarm alarm;
     }
 
     // -----------------------------
+
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            final GarbageCollectDay item = (GarbageCollectDay) adapterView.getAdapter().getItem(i);
+            final NotifySettingsDialogFragment dialogFragment = NotifySettingsDialogFragment.newInstance(item.type);
+            dialogFragment.setTargetFragment(GarbageCollectDaysFragment.this, 0);
+            dialogFragment.show(getFragmentManager(), null);
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+    };
 
     private List<GarbageCollectDay> garbageCollectDayList = new ArrayList<>();
 
@@ -196,12 +238,16 @@ public class GarbageCollectDaysFragment extends Fragment {
                 final int viewColor = GarbageType.getViewColor(getContext(), item.type);
                 convertView.setBackgroundColor(viewColor);
 
-                final int nearestDaysAfter = AppUtil.calcNearestDaysAfter(item.days);
+                final int nearestDaysAfter = AppUtil.calcNearestDaysAfter(item.days, 8, 0, false);
                 holder.daysAfter.setText(AppUtil.convertDaysAfterText(nearestDaysAfter));
 
                 holder.collectDays.setText(AppUtil.createGarbageCollectDaysText(item.days, nearestDaysAfter));
 
-                holder.alarm.setText("7:00");
+                if (item.alarm != null && item.alarm.enable) {
+                    holder.alarm.setText(item.alarm.toString());
+                } else {
+                    holder.alarm.setText("設定なし");
+                }
             }
 
             return convertView;

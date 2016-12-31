@@ -17,9 +17,6 @@ import android.widget.Toast;
 import com.atilika.kuromoji.TokenizerBase;
 import com.atilika.kuromoji.ipadic.Token;
 import com.atilika.kuromoji.ipadic.Tokenizer;
-import com.kubotaku.android.code4kyoto5374.data.AreaDays;
-import com.kubotaku.android.code4kyoto5374.data.AreaMaster;
-import com.kubotaku.android.code4kyoto5374.data.GarbageData;
 import com.kubotaku.android.code4kyoto5374.fragments.GarbageCollectDaysFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.HomeSelectFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.OnCloseFragmentListener;
@@ -164,18 +161,13 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
 
             // for test
             {
-//                final Realm realm = Realm.getDefaultInstance();
-//
-//                // check saved size
-//                final long areaMasterCount = realm.where(AreaMaster.class).count();
-//                final long areaDaysCount = realm.where(AreaDays.class).count();
-//                final long garbageDataCount = realm.where(GarbageData.class).count();
-//
-//                // initialize all data
-//                realm.beginTransaction();
-//                realm.deleteAll();
-//                realm.commitTransaction();
-//                realm.close();
+                final Realm realm = Realm.getDefaultInstance();
+
+                // initialize all data
+                realm.beginTransaction();
+                realm.deleteAll();
+                realm.commitTransaction();
+                realm.close();
             }
 
             final DatabaseCreator databaseCreator = new DatabaseCreator(MainActivity.this);

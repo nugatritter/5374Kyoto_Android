@@ -157,6 +157,12 @@ public class AppUtil {
         return ""; // error
     }
 
+    /**
+     * N日後をUI表示用に変換する
+     *
+     * @param daysAfter N日後
+     * @return 変換後の文字列
+     */
     public static String convertDaysAfterText(int daysAfter) {
         switch (daysAfter) {
             case 0:
@@ -171,45 +177,73 @@ public class AppUtil {
         return "" + daysAfter + "日後";
     }
 
-    public static int calcNearestDaysAfter(List<GarbageDays> daysList) {
+    /**
+     * 指定されたごみ収集日のもっとも近い日(N日後)を取得する
+     *
+     * @param daysList 収集日リスト
+     * @return N日後
+     */
+    public static int calcNearestDaysAfter(List<GarbageDays> daysList, final int targetHour, final int targetMinute, final boolean ignoreToday) {
 
         final Calendar calendar = Calendar.getInstance();
         final int todayDayOfWeekInMonth = calendar.get(DAY_OF_WEEK_IN_MONTH);
         final int todayDayOfWeek = calendar.get(DAY_OF_WEEK);
 
-        final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        boolean beforeTargetTime = isBeforeTargetTime(targetHour, targetMinute);
+        if (ignoreToday) {
+            beforeTargetTime = false;
+        }
 
         int nearestDaysAfter = 31;
-
         for (GarbageDays days : daysList) {
 
+            int day = days.day;
+            int week = days.week;
+
             int diffWeek = 0;
-            if (days.week != -1) {
-                if (todayDayOfWeekInMonth <= days.week) {
-                    diffWeek = (days.week - todayDayOfWeekInMonth);
+            if (week != -1) {
+                if (todayDayOfWeekInMonth <= week) {
+                    diffWeek = (week - todayDayOfWeekInMonth);
                 } else {
                     final int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
                     calendar.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
                     final int maxWeekInMonth = calendar.getActualMaximum(DAY_OF_WEEK_IN_MONTH);
-                    diffWeek = (maxWeekInMonth - todayDayOfWeekInMonth) + days.week - 1;
+                    diffWeek = (maxWeekInMonth - todayDayOfWeekInMonth) + week - 1;
                 }
             }
 
-            if (((todayDayOfWeek < days.day) && (days.week == 0)) ||
-                    ((todayDayOfWeek == days.day) && (diffWeek == 0) && (hour < 8))) {
-                final int diff = days.day - todayDayOfWeek;
-                if (nearestDaysAfter > diff) {
-                    nearestDaysAfter = diff;
-                }
+            int diff;
+            if (((todayDayOfWeek < day) && (diffWeek == 0)) ||
+                    ((todayDayOfWeek == day) && (diffWeek == 0) && beforeTargetTime)) {
+                diff = day - todayDayOfWeek;
+            } else if ((todayDayOfWeek == day) && (diffWeek == 0) && !beforeTargetTime) {
+                diff = 7;
+            } else if ((todayDayOfWeek > day) && (diffWeek == 0)) {
+                diff = 7 + (day - todayDayOfWeek);
             } else {
-                final int diff = (7 * diffWeek) + days.day - todayDayOfWeek;
-                if (nearestDaysAfter > diff) {
-                    nearestDaysAfter = diff;
-                }
+                diff = (7 * diffWeek) + day - todayDayOfWeek;
+            }
+
+            if ((diff >= 0) && (nearestDaysAfter > diff)) {
+                nearestDaysAfter = diff;
             }
         }
 
         return nearestDaysAfter;
+    }
+
+    private static boolean isBeforeTargetTime(final int targetHour, final int targetMinute) {
+        final Calendar instance = Calendar.getInstance();
+        final int currentH = instance.get(Calendar.HOUR_OF_DAY);
+        final int currentM = instance.get(Calendar.MINUTE);
+
+        if (currentH < targetHour) {
+            return true;
+        } else if ((currentH == targetHour) && (currentM <= targetMinute)) {
+            return true;
+        }
+
+        return false;
     }
 
     public static String createGarbageCollectDaysText(List<GarbageDays> daysList, int nearestDaysAfter) {

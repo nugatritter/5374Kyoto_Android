@@ -3,6 +3,7 @@ package com.kubotaku.android.code4kyoto5374.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.kubotaku.android.code4kyoto5374.data.Alarm;
 import com.kubotaku.android.code4kyoto5374.data.HomePlace;
 
 /**
@@ -22,6 +23,49 @@ public class Prefs {
     private static final String KEY_HOME_AREA_MASTER_ID = "key_home_area_master_id";
 
     private static final String KEY_HOME_AREA_NAME = "key_home_area_name";
+
+    private static final String KEY_ALARM_HOUR = "key_alarm_hour_";
+
+    private static final String KEY_ALARM_MINUTE = "key_alarm_minute_";
+
+    private static final String KEY_ALARM_ENABLE = "key_alarm_enable_";
+
+
+    /**
+     * 通知設定を保存する
+     *
+     * @param context     コンテキスト
+     * @param garbageType ごみ種別
+     * @param alarm       アラート設定
+     */
+    public static void saveAlarm(Context context, final int garbageType, final Alarm alarm) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+        final SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putInt(KEY_ALARM_HOUR + garbageType, alarm.hour);
+        editor.putInt(KEY_ALARM_MINUTE + garbageType, alarm.minute);
+        editor.putBoolean(KEY_ALARM_ENABLE + garbageType, alarm.enable);
+
+        editor.apply();
+    }
+
+    /**
+     * 通知設定を読み込む
+     *
+     * @param context     コンテキスト
+     * @param garbageType ごみ種別
+     * @return アラート設定
+     */
+    public static Alarm loadAlarm(Context context, final int garbageType) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+
+        final Alarm alarm = new Alarm();
+        alarm.hour = prefs.getInt(KEY_ALARM_HOUR + garbageType, 6);
+        alarm.minute = prefs.getInt(KEY_ALARM_MINUTE + garbageType, 0);
+        alarm.enable = prefs.getBoolean(KEY_ALARM_ENABLE + garbageType, false);
+
+        return alarm;
+    }
 
     /**
      * 自宅所在地情報を保存する
