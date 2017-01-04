@@ -1,6 +1,7 @@
 package com.kubotaku.android.code4kyoto5374.data;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.content.res.AppCompatResources;
 
@@ -147,6 +148,38 @@ public class GarbageType extends RealmObject {
         this.type = type;
     }
 
+    public static String getTypeText(final int type) {
+        switch (type) {
+            case TYPE_NO:
+                return TEXT_TYPE_NO;
+            case TYPE_BURNABLE:
+                return TEXT_TYPE_BURNABLE;
+            case TYPE_BIN:
+                return TEXT_TYPE_BIN;
+            case TYPE_PLASTIC:
+                return TEXT_TYPE_PLASTIC;
+            case TYPE_SMALL:
+                return TEXT_TYPE_SMALL;
+            case TYPE_BIG:
+                return TEXT_TYPE_BIG;
+            case TYPE_PLACE:
+                return TEXT_TYPE_PLACE;
+            case TYPE_PAPER:
+                return TEXT_TYPE_PAPER;
+            case TYPE_RECYCLE:
+                return TEXT_TYPE_RECYCLE;
+            case TYPE_SHOP:
+                return TEXT_TYPE_SHOP;
+            case TYPE_PAPER_NEWS_PAPER:
+                return TEXT_TYPE_PAPER_NEWS_PAPER;
+            case TYPE_PAPER_CARDBOARD:
+                return TEXT_TYPE_PAPER_CARDBOARD;
+            default:
+                return "";
+        }
+    }
+
+
     public static GarbageType parse(String src) {
 
         final GarbageType garbageType = new GarbageType();
@@ -223,7 +256,58 @@ public class GarbageType extends RealmObject {
 
             case TYPE_PLASTIC:
                 return ContextCompat.getColor(context, R.color.color_plastic);
+
+            case TYPE_PLACE:
+                return ContextCompat.getColor(context, R.color.color_place);
+
+            case TYPE_PAPER:
+                return ContextCompat.getColor(context, R.color.color_paper);
+
+            case TYPE_BIG:
+                return ContextCompat.getColor(context, R.color.color_big);
+
+            case TYPE_NO:
+                return ContextCompat.getColor(context, R.color.color_no);
+
+            case TYPE_SHOP:
+                return ContextCompat.getColor(context, R.color.color_shop);
         }
         return 0;
+    }
+
+    public static int getViewTextColor(final Context context, final int type) {
+        switch (type) {
+            case TYPE_BURNABLE:
+                return ContextCompat.getColor(context, R.color.text_garbage_type_inverse);
+
+            case TYPE_BIN:
+            case TYPE_SMALL:
+            case TYPE_PLASTIC:
+            case TYPE_PLACE:
+            case TYPE_PAPER:
+            case TYPE_BIG:
+            case TYPE_NO:
+            case TYPE_SHOP:
+                return ContextCompat.getColor(context, R.color.text_garbage_type);
+        }
+        return 0;
+    }
+
+    public static Drawable getAlarmClockDrawable(final Context context, final int type) {
+        switch (type) {
+            case TYPE_BURNABLE:
+                return ContextCompat.getDrawable(context, R.drawable.ic_alarm_inverse);
+
+            case TYPE_BIN:
+            case TYPE_SMALL:
+            case TYPE_PLASTIC:
+            case TYPE_PLACE:
+            case TYPE_PAPER:
+            case TYPE_BIG:
+            case TYPE_NO:
+            case TYPE_SHOP:
+                return ContextCompat.getDrawable(context, R.drawable.ic_alarm);
+        }
+        return null;
     }
 }

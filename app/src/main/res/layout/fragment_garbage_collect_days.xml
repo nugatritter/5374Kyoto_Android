@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context="com.kubotaku.android.code4kyoto5374.fragments.GarbageCollectDaysFragment">
 
@@ -17,8 +16,9 @@
     </ListView>
 
     <Button
+        android:id="@+id/collect_btn_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="捨て方を調べたい" />
+        android:text="@string/btn_search_segregation" />
 
 </LinearLayout>

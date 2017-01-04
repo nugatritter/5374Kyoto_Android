@@ -21,7 +21,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,11 @@
 
         <service
             android:name=".util.AlarmService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".SegregationActivity"
+            android:label="ごみ分別辞典"></activity>
     </application>
 
 </manifest>

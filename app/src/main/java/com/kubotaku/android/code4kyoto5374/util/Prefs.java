@@ -109,19 +109,19 @@ public class Prefs {
 
         final HomePlace homePlace = new HomePlace();
 
-        final String encryptAddress = prefs.getString(KEY_HOME_ADDRESS, "");
+        final String encryptAddress = prefs.getString(KEY_HOME_ADDRESS, "-");
         homePlace.address = EncryptUtil.decryptString(context, encryptAddress);
 
-        final String encryptLat = prefs.getString(KEY_HOME_LAT, "");
+        final String encryptLat = prefs.getString(KEY_HOME_LAT, "0");
         final String latText = EncryptUtil.decryptString(context, encryptLat);
 
-        final String encryptLon = prefs.getString(KEY_HOME_LON, "");
+        final String encryptLon = prefs.getString(KEY_HOME_LON, "0");
         final String lonText = EncryptUtil.decryptString(context, encryptLon);
 
-        final String encryptAreaMasterID = prefs.getString(KEY_HOME_AREA_MASTER_ID, "");
+        final String encryptAreaMasterID = prefs.getString(KEY_HOME_AREA_MASTER_ID, "-1");
         final String areaMasterIDText = EncryptUtil.decryptString(context, encryptAreaMasterID);
 
-        final String encryptAreaName = prefs.getString(KEY_HOME_AREA_NAME, "");
+        final String encryptAreaName = prefs.getString(KEY_HOME_AREA_NAME, "-");
         homePlace.areaName = EncryptUtil.decryptString(context, encryptAreaName);
 
         try {

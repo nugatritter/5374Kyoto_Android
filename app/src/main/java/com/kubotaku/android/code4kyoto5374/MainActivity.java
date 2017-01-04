@@ -12,15 +12,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atilika.kuromoji.TokenizerBase;
 import com.atilika.kuromoji.ipadic.Token;
 import com.atilika.kuromoji.ipadic.Tokenizer;
+import com.kubotaku.android.code4kyoto5374.data.HomePlace;
 import com.kubotaku.android.code4kyoto5374.fragments.GarbageCollectDaysFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.HomeSelectFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.OnCloseFragmentListener;
 import com.kubotaku.android.code4kyoto5374.util.DatabaseCreator;
+import com.kubotaku.android.code4kyoto5374.util.Prefs;
 
 import java.util.List;
 
@@ -35,12 +38,6 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final Tokenizer tokenizer = new Tokenizer.Builder().mode(TokenizerBase.Mode.NORMAL).build();
-        final List<Token> rets = tokenizer.tokenize("DVDケース");
-        for (Token ret : rets) {
-            Log.d("test2", ret.getReading());
-        }
     }
 
     @Override
@@ -62,10 +59,13 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     }
 
     private void showSelectHomeViewIfNeeded() {
-
-        // TODO:check saved home information
-
-        showSelectHomeView();
+        // check saved home information
+        HomePlace savedHomePlace = Prefs.loadHomePlace(this);
+        if (savedHomePlace.address.equals("-")) {
+            showSelectHomeView();
+        } else {
+            showGarbageDaysView();
+        }
     }
 
     private void showSelectHomeView() {
@@ -115,17 +115,6 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     }
 
 
-    // -----------------------------
-
-    private void enabledProgress(boolean enabled) {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
-        if (enabled) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
     // --------------------------------------
 
     @Override
@@ -156,6 +145,12 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
 
 
     private class InitDatabaseTask extends AsyncTask<Void, Void, Boolean> {
+
+        public InitDatabaseTask() {
+            TextView initText = (TextView) findViewById(R.id.text_init);
+            initText.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -177,6 +172,10 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
         @Override
         protected void onPostExecute(Boolean result) {
             enabledProgress(false);
+
+            TextView initText = (TextView) findViewById(R.id.text_init);
+            initText.setVisibility(View.GONE);
+
             if (result) {
                 showSelectHomeViewIfNeeded();
             } else {

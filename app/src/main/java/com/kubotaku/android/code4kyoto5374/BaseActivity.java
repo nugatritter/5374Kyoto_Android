@@ -3,12 +3,17 @@ package com.kubotaku.android.code4kyoto5374;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.kubotaku.android.code4kyoto5374.fragments.OnFragmentTaskListener;
 
 /**
- * Created by kubotaku1119 on 2016/12/25.
+ * Common abstract activity class.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements OnPermissionRequestListener {
+public abstract class BaseActivity extends AppCompatActivity
+        implements OnPermissionRequestListener, OnFragmentTaskListener {
 
     // --------------------------------------
 
@@ -37,4 +42,25 @@ public abstract class BaseActivity extends AppCompatActivity implements OnPermis
                 requestCode);
     }
 
+    // -----------------------------
+
+
+    @Override
+    public void onTaskStart() {
+        enabledProgress(true);
+    }
+
+    @Override
+    public void onTaskStop() {
+        enabledProgress(false);
+    }
+
+    protected void enabledProgress(boolean enabled) {
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
+        if (enabled) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
 }

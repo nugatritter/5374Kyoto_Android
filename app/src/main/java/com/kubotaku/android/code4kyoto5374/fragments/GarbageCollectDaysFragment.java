@@ -2,6 +2,8 @@ package com.kubotaku.android.code4kyoto5374.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.vision.text.Text;
 import com.kubotaku.android.code4kyoto5374.R;
+import com.kubotaku.android.code4kyoto5374.SegregationActivity;
 import com.kubotaku.android.code4kyoto5374.data.Alarm;
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
 import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
@@ -24,7 +28,6 @@ import com.kubotaku.android.code4kyoto5374.util.AppUtil;
 import com.kubotaku.android.code4kyoto5374.util.Prefs;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -138,6 +141,15 @@ public class GarbageCollectDaysFragment extends Fragment
         listView.setAdapter(garbageCollectDaysAdapter);
         listView.setOnItemSelectedListener(onItemSelectedListener);
         listView.setOnItemClickListener(onItemClickListener);
+
+        Button btnSearch = (Button) view.findViewById(R.id.collect_btn_search);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SegregationActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -188,6 +200,7 @@ public class GarbageCollectDaysFragment extends Fragment
         TextView type;
         TextView collectDays;
         TextView alarm;
+        ImageView clock;
     }
 
     private class GarbageCollectDaysAdapter extends BaseAdapter {
@@ -223,6 +236,7 @@ public class GarbageCollectDaysFragment extends Fragment
                 holder.type = (TextView) view.findViewById(R.id.text_garbage_type);
                 holder.collectDays = (TextView) view.findViewById(R.id.text_collect_days);
                 holder.alarm = (TextView) view.findViewById(R.id.text_alarm_settings);
+                holder.clock = (ImageView) view.findViewById(R.id.image_alarm_clock);
 
                 convertView = view;
                 convertView.setTag(holder);
@@ -233,21 +247,31 @@ public class GarbageCollectDaysFragment extends Fragment
             final GarbageCollectDay item = getItem(position);
             if (item != null) {
 
-                holder.type.setText(GarbageType.getViewText(item.type));
+                Context context = getContext();
 
-                final int viewColor = GarbageType.getViewColor(getContext(), item.type);
+                holder.type.setText(GarbageType.getViewText(item.type));
+                int textColor = GarbageType.getViewTextColor(context, item.type);
+                holder.type.setTextColor(textColor);
+
+                final int viewColor = GarbageType.getViewColor(context, item.type);
                 convertView.setBackgroundColor(viewColor);
 
                 final int nearestDaysAfter = AppUtil.calcNearestDaysAfter(item.days, 8, 0, false);
                 holder.daysAfter.setText(AppUtil.convertDaysAfterText(nearestDaysAfter));
+                holder.daysAfter.setTextColor(textColor);
 
                 holder.collectDays.setText(AppUtil.createGarbageCollectDaysText(item.days, nearestDaysAfter));
+                holder.collectDays.setTextColor(textColor);
 
+                holder.alarm.setTextColor(textColor);
                 if (item.alarm != null && item.alarm.enable) {
                     holder.alarm.setText(item.alarm.toString());
                 } else {
                     holder.alarm.setText("設定なし");
                 }
+
+                Drawable clock = GarbageType.getAlarmClockDrawable(context, item.type);
+                holder.clock.setImageDrawable(clock);
             }
 
             return convertView;
