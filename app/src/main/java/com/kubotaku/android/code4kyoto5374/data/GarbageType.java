@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 kubotaku1119 <kubotaku1119@gmail.com>
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.kubotaku.android.code4kyoto5374.data;
 
 import android.content.Context;
@@ -148,6 +163,15 @@ public class GarbageType extends RealmObject {
         this.type = type;
     }
 
+    /**
+     * タイプ別の文字列を取得する
+     * <p>
+     * 燃える, プラなどの短縮された文字列
+     * </p>
+     *
+     * @param type タイプ
+     * @return 文字列
+     */
     public static String getTypeText(final int type) {
         switch (type) {
             case TYPE_NO:
@@ -179,7 +203,12 @@ public class GarbageType extends RealmObject {
         }
     }
 
-
+    /**
+     * ごみタイプ情報を文字列からパースする.
+     *
+     * @param src 元文字列
+     * @return
+     */
     public static GarbageType parse(String src) {
 
         final GarbageType garbageType = new GarbageType();
@@ -226,6 +255,12 @@ public class GarbageType extends RealmObject {
         return garbageType;
     }
 
+    /**
+     * タイプから表示用の長い文字列を取得する.
+     *
+     * @param type タイプ
+     * @return 文字列
+     */
     public static String getViewText(final int type) {
         switch (type) {
             case TYPE_BURNABLE:
@@ -243,6 +278,13 @@ public class GarbageType extends RealmObject {
         return "";
     }
 
+    /**
+     * タイプから表示用の背景色を取得する
+     *
+     * @param context コンテキスト
+     * @param type    タイプ
+     * @return resource/colorのID
+     */
     public static int getViewColor(final Context context, final int type) {
         switch (type) {
             case TYPE_BURNABLE:
@@ -275,6 +317,13 @@ public class GarbageType extends RealmObject {
         return 0;
     }
 
+    /**
+     * タイプから表示用の文字色を取得する
+     *
+     * @param context コンテキスト
+     * @param type    タイプ
+     * @return
+     */
     public static int getViewTextColor(final Context context, final int type) {
         switch (type) {
             case TYPE_BURNABLE:
@@ -293,6 +342,13 @@ public class GarbageType extends RealmObject {
         return 0;
     }
 
+    /**
+     * タイプからアラート設定アイコンを取得する
+     *
+     * @param context コンテキスト
+     * @param type    タイプ
+     * @return
+     */
     public static Drawable getAlarmClockDrawable(final Context context, final int type) {
         switch (type) {
             case TYPE_BURNABLE:
