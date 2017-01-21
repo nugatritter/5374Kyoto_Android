@@ -151,6 +151,23 @@ public class GarbageType extends RealmObject {
     public static final String TEXT_TYPE_PAPER_CARDBOARD = "ダンボール";
 
     /**
+     * ゴミ種別一覧
+     */
+    public static final int[] TYPES = {
+            TYPE_NO,
+            TYPE_BURNABLE,
+            TYPE_PLACE,
+            TYPE_SMALL,
+            TYPE_BIG,
+            TYPE_PLACE,
+            TYPE_PAPER,
+            TYPE_RECYCLE,
+            TYPE_SHOP,
+            TYPE_PAPER_NEWS_PAPER,
+            TYPE_PAPER_CARDBOARD
+    };
+
+    /**
      * ごみ区別
      */
     public int type;

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MyApplication"
@@ -19,6 +20,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBgCWT6NBMr7sKbQYQK9jBNYEzHAEtvrgA" />
 
+        <!-- メイン画面 -->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -30,15 +32,27 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".util.AlarmService"
-            android:exported="false" />
-
+        <!-- ごみ分別辞典 -->
         <activity
             android:name=".SegregationActivity"
             android:label="ごみ分別辞典" />
         <activity android:name=".HowToDisposeActivity" />
 
+        <!-- ごみ捨てアラーム通知サービス -->
+        <service
+            android:name=".util.AlarmService"
+            android:exported="false" />
+
+        <!-- 端末起動時アラーム再設定用レシーバー -->
+        <receiver
+            android:name=".util.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ごみ回収日ウィジェット -->
         <receiver android:name=".widget.GarbageCollectDayWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

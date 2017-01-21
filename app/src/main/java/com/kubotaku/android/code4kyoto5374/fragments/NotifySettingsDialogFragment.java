@@ -141,10 +141,7 @@ public class NotifySettingsDialogFragment extends DialogFragment
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             alarm.enable = b;
-
             Prefs.saveAlarm(getContext(), garbageType, alarm);
-
-            setupAlarm();
         }
     };
 
@@ -161,6 +158,8 @@ public class NotifySettingsDialogFragment extends DialogFragment
         super.onDismiss(dialog);
 
         Prefs.saveAlarm(getContext(), garbageType, this.alarm);
+
+        setupAlarm();
 
         if (onDismissDialogFragmentListener != null) {
             onDismissDialogFragmentListener.onDismissDialog(true);
