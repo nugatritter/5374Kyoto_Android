@@ -32,6 +32,7 @@ import com.kubotaku.android.code4kyoto5374.data.HomePlace;
 import com.kubotaku.android.code4kyoto5374.fragments.GarbageCollectDaysFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.HomeSelectFragment;
 import com.kubotaku.android.code4kyoto5374.fragments.OnCloseFragmentListener;
+import com.kubotaku.android.code4kyoto5374.fragments.OpenSourceLicenseDialog;
 import com.kubotaku.android.code4kyoto5374.util.DatabaseCreator;
 import com.kubotaku.android.code4kyoto5374.util.Prefs;
 
@@ -142,10 +143,21 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
                 return true;
 
             case R.id.menu_license:
+                showOpenSourceLicense();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // --------------------------------------
+
+    private void showOpenSourceLicense() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag(OpenSourceLicenseDialog.TAG) == null) {
+            OpenSourceLicenseDialog dialog = OpenSourceLicenseDialog.newInstance();
+            dialog.show(fm, OpenSourceLicenseDialog.TAG);
         }
     }
 
