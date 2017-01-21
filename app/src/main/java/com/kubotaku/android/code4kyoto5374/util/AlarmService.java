@@ -29,6 +29,7 @@ import android.support.v7.app.NotificationCompat;
 import com.kubotaku.android.code4kyoto5374.R;
 import com.kubotaku.android.code4kyoto5374.data.Alarm;
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
+import com.kubotaku.android.code4kyoto5374.data.GarbageCollectDay;
 import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
 import com.kubotaku.android.code4kyoto5374.data.GarbageType;
 import com.kubotaku.android.code4kyoto5374.data.HomePlace;
@@ -87,7 +88,8 @@ public class AlarmService extends IntentService {
         }
 
         final AreaDays areaDays = results.first();
-        final List<GarbageDays> garbageDays = areaDays.getTargetGarbageDays(garbageType);
+        final List<GarbageCollectDay.GarbageDaysForViews> garbageDays
+                = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.getTargetGarbageDays(garbageType));
         if (garbageDays == null) {
             realm.close();
             return; // error

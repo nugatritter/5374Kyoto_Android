@@ -9,4 +9,5 @@
     <string name="hint_segregation_input">分別方法を知りたいモノを入力してください</string>
     <string name="message_missing_match_garbage">該当するモノが見つかりませんでした。別の単語でお試しください。</string>
     <string name="btn_search_segregation">分別方法を調べたい</string>
+    <string name="btn_howto">捨て方を調べたい</string>
 </resources>

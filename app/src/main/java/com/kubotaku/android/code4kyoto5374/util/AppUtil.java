@@ -18,6 +18,7 @@ package com.kubotaku.android.code4kyoto5374.util;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.kubotaku.android.code4kyoto5374.data.GarbageCollectDay;
 import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
 
 import java.io.BufferedReader;
@@ -196,7 +197,7 @@ public class AppUtil {
      * @param daysList 収集日リスト
      * @return N日後
      */
-    public static int calcNearestDaysAfter(List<GarbageDays> daysList, final int targetHour, final int targetMinute, final boolean ignoreToday) {
+    public static int calcNearestDaysAfter(List<GarbageCollectDay.GarbageDaysForViews> daysList, final int targetHour, final int targetMinute, final boolean ignoreToday) {
 
         final Calendar calendar = Calendar.getInstance();
         final int todayDayOfWeekInMonth = calendar.get(DAY_OF_WEEK_IN_MONTH);
@@ -208,7 +209,7 @@ public class AppUtil {
         }
 
         int nearestDaysAfter = 31;
-        for (GarbageDays days : daysList) {
+        for (GarbageCollectDay.GarbageDaysForViews days : daysList) {
 
             int day = days.day;
             int week = days.week;
@@ -259,9 +260,9 @@ public class AppUtil {
         return false;
     }
 
-    public static String createGarbageCollectDaysText(List<GarbageDays> daysList, int nearestDaysAfter) {
+    public static String createGarbageCollectDaysText(List<GarbageCollectDay.GarbageDaysForViews> daysList, int nearestDaysAfter) {
         String text = "";
-        for (GarbageDays days : daysList) {
+        for (GarbageCollectDay.GarbageDaysForViews days : daysList) {
             text += days.toViewString();
             text += " ";
         }

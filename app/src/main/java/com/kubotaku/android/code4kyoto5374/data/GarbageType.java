@@ -350,9 +350,24 @@ public class GarbageType extends RealmObject {
      * @return
      */
     public static Drawable getAlarmClockDrawable(final Context context, final int type) {
+        int id = getAlarmClockResourceId(context, type);
+        if (id == -1) {
+            return null;
+        }
+        return ContextCompat.getDrawable(context, id);
+    }
+
+    /**
+     * タイプからアラート設定アイコンを取得する
+     *
+     * @param context コンテキスト
+     * @param type    タイプ
+     * @return
+     */
+    public static int getAlarmClockResourceId(final Context context, final int type) {
         switch (type) {
             case TYPE_BURNABLE:
-                return ContextCompat.getDrawable(context, R.drawable.ic_alarm_inverse);
+                return R.drawable.ic_alarm_inverse;
 
             case TYPE_BIN:
             case TYPE_SMALL:
@@ -362,8 +377,8 @@ public class GarbageType extends RealmObject {
             case TYPE_BIG:
             case TYPE_NO:
             case TYPE_SHOP:
-                return ContextCompat.getDrawable(context, R.drawable.ic_alarm);
+                return R.drawable.ic_alarm;
         }
-        return null;
+        return -1;
     }
 }

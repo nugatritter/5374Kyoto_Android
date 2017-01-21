@@ -36,7 +36,22 @@
 
         <activity
             android:name=".SegregationActivity"
-            android:label="ごみ分別辞典"></activity>
+            android:label="ごみ分別辞典" />
+        <activity android:name=".HowToDisposeActivity" />
+
+        <receiver android:name=".widget.GarbageCollectDayWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/garbage_collect_day_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.GarbageCollectDayWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

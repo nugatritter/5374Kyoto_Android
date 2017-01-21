@@ -15,10 +15,27 @@
 
     </ListView>
 
-    <Button
-        android:id="@+id/collect_btn_search"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_search_segregation" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/collect_btn_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_search_segregation" />
+
+        <Button
+            android:id="@+id/collect_btn_howto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_howto"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -18,6 +18,8 @@ package com.kubotaku.android.code4kyoto5374.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,6 +52,7 @@ import com.kubotaku.android.code4kyoto5374.data.AreaMaster;
 import com.kubotaku.android.code4kyoto5374.data.HomePlace;
 import com.kubotaku.android.code4kyoto5374.util.AreaUtil;
 import com.kubotaku.android.code4kyoto5374.util.Prefs;
+import com.kubotaku.android.code4kyoto5374.widget.GarbageCollectDayWidget;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -368,6 +371,8 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
             if (onCloseFragmentListener != null) {
                 onCloseFragmentListener.onCloseFragment(HomeSelectFragment.this);
             }
+
+            updateAppWidget();
         }
     };
 
@@ -380,4 +385,11 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
             }
         }
     };
+
+    private void updateAppWidget() {
+        Context context = getContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName componentName = new ComponentName(context, GarbageCollectDayWidget.class);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.list_collect_days);
+    }
 }

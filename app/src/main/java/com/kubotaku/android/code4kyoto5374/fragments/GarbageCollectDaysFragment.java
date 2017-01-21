@@ -36,6 +36,7 @@ import com.kubotaku.android.code4kyoto5374.R;
 import com.kubotaku.android.code4kyoto5374.SegregationActivity;
 import com.kubotaku.android.code4kyoto5374.data.Alarm;
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
+import com.kubotaku.android.code4kyoto5374.data.GarbageCollectDay;
 import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
 import com.kubotaku.android.code4kyoto5374.data.GarbageType;
 import com.kubotaku.android.code4kyoto5374.data.HomePlace;
@@ -124,25 +125,25 @@ public class GarbageCollectDaysFragment extends Fragment
 
             final GarbageCollectDay burnable = new GarbageCollectDay();
             burnable.type = GarbageType.TYPE_BURNABLE;
-            burnable.days = areaDays.burnableDays;
+            burnable.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.burnableDays);
             burnable.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_BURNABLE);
             garbageCollectDayList.add(burnable);
 
             final GarbageCollectDay plastic = new GarbageCollectDay();
             plastic.type = GarbageType.TYPE_PLASTIC;
-            plastic.days = areaDays.plasticDays;
+            plastic.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.plasticDays);
             plastic.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_PLASTIC);
             garbageCollectDayList.add(plastic);
 
             final GarbageCollectDay bin = new GarbageCollectDay();
             bin.type = GarbageType.TYPE_BIN;
-            bin.days = areaDays.binDays;
+            bin.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.binDays);
             bin.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_BIN);
             garbageCollectDayList.add(bin);
 
             final GarbageCollectDay small = new GarbageCollectDay();
             small.type = GarbageType.TYPE_SMALL;
-            small.days = areaDays.smallDays;
+            small.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.smallDays);
             small.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_SMALL);
             garbageCollectDayList.add(small);
         }
@@ -176,14 +177,6 @@ public class GarbageCollectDaysFragment extends Fragment
                 garbageCollectDaysAdapter.notifyDataSetChanged();
             }
         }
-    }
-
-    // -----------------------------
-
-    private static final class GarbageCollectDay {
-        int type;
-        List<GarbageDays> days;
-        Alarm alarm;
     }
 
     // -----------------------------
