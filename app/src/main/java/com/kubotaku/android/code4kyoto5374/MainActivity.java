@@ -70,7 +70,9 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     private void showSelectHomeViewIfNeeded() {
         // check saved home information
         HomePlace savedHomePlace = Prefs.loadHomePlace(this);
-        if (savedHomePlace.address.equals("-")) {
+        if ((savedHomePlace.address == null) ||
+                savedHomePlace.address.isEmpty() ||
+                savedHomePlace.address.equals("-")) {
             showSelectHomeView();
         } else {
             showGarbageDaysView();
