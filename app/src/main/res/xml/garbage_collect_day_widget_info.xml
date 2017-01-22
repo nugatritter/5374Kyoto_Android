@@ -4,5 +4,5 @@
     android:minHeight="40dp"
     android:minWidth="250dp"
     android:previewImage="@drawable/kyoto_garbage_widget"
-    android:resizeMode="vertical"
+    android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="3600000"></appwidget-provider>

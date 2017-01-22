@@ -31,6 +31,8 @@ import com.kubotaku.android.code4kyoto5374.R;
  */
 public class GarbageCollectDayWidget extends AppWidgetProvider {
 
+    public static final String TAG = GarbageCollectDayWidget.class.getSimpleName();
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
@@ -57,6 +59,9 @@ public class GarbageCollectDayWidget extends AppWidgetProvider {
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, rv);
+
+        // update list
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_collect_days);
     }
 
     @Override

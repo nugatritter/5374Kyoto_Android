@@ -47,6 +47,8 @@ public class GarbageCollectDayWidgetService extends RemoteViewsService {
 
     private static class GarbageCollectDayWidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
+        public static final String TAG = GarbageCollectDayWidgetViewsFactory.class.getSimpleName();
+
         private Context context;
 
         private List<GarbageCollectDay> garbageCollectDayList;
