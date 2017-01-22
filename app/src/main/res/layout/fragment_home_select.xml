@@ -22,6 +22,9 @@
                 android:text="@string/label_area_select_title"
                 android:textColor="@android:color/black" />
 
+            <android.support.v4.widget.Space
+                android:layout_width="1dp"
+                android:layout_height="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,8 +35,11 @@
 
             <TextView
                 android:id="@+id/text_selected_place"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#80ffffff"
+                android:padding="8dp"
                 android:text="@string/text_no_select"
                 android:textColor="@android:color/black" />
 
@@ -52,7 +58,7 @@
                 android:id="@+id/text_place_alert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="複数の結果がありました。以下から選択して下さい。"
+                android:text="@string/text_exist_multi_choice"
                 android:textColor="@android:color/black"
                 android:visibility="gone" />
 
@@ -70,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="選択された地域の情報"
+                android:text="@string/text_selected_area_info"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -78,7 +84,10 @@
                 android:id="@+id/text_selected_area_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#80ffffff"
                 android:padding="8dp"
+                android:text="@string/text_please_select_area"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -95,6 +104,7 @@
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#80ffffff"
         android:orientation="horizontal">
 
         <Button

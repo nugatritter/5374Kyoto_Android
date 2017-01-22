@@ -5,9 +5,12 @@
     <string name="label_area_select_title">ごみの収集日を表示する地点を選択して下さい</string>
     <string name="label_area_selected">選択された地域</string>
     <string name="text_no_select">選択されていません</string>
-    <string name="text_select_area">地図で選択する</string>
+    <string name="text_select_area">選択する</string>
     <string name="hint_segregation_input">分別方法を知りたいモノを入力してください</string>
     <string name="message_missing_match_garbage">該当するモノが見つかりませんでした。別の単語でお試しください。</string>
     <string name="btn_search_segregation">分別方法を調べたい</string>
     <string name="btn_howto">捨て方を調べたい</string>
+    <string name="text_exist_multi_choice">複数の結果がありました。以下から選択して下さい。</string>
+    <string name="text_selected_area_info">選択された地域の情報</string>
+    <string name="text_please_select_area">お住いの地域を選択してください</string>
 </resources>
