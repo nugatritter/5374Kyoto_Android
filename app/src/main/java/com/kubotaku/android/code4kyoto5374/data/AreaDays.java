@@ -146,31 +146,29 @@ public class AreaDays extends RealmObject {
     public String toInfoString() {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append("収集センター : \n");
-        sb.append("  " + centerName + "\n");
-        sb.append("燃やすごみ : \n");
+        sb.append("燃やすごみ : ");
         for (GarbageDays d : burnableDays) {
-            sb.append("  " + d.toString() + " ");
+            sb.append(d.toString() + " ");
         }
-        sb.append("\n");
+        sb.append("\n\n");
 
-        sb.append("缶・ビン・ペットボトル : \n");
+        sb.append("缶・ビン・ペットボトル : ");
         for (GarbageDays d : binDays) {
-            sb.append("  " + d.toString() + " ");
+            sb.append(d.toString() + " ");
         }
-        sb.append("\n");
+        sb.append("\n\n");
 
-        sb.append("プラスチック製容器包装 : \n");
+        sb.append("プラスチック製容器包装 : ");
         for (GarbageDays d : plasticDays) {
-            sb.append("  " + d.toString() + " ");
+            sb.append(d.toString() + " ");
         }
-        sb.append("\n");
+        sb.append("\n\n");
 
-        sb.append("小型金属類 : \n");
+        sb.append("小型金属類 : ");
         for (GarbageDays d : smallDays) {
-            sb.append("  " + d.toString() + " ");
+            sb.append(d.toString() + " ");
         }
-        sb.append("\n");
+        sb.append("\n\n");
 
         return sb.toString();
     }

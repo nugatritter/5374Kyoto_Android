@@ -80,10 +80,14 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     }
 
     private void showSelectHomeView() {
+        showSelectHomeView(HomeSelectFragment.MODE_INITIALIZE);
+    }
+
+    private void showSelectHomeView(int mode) {
         final FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentByTag(HomeSelectFragment.TAG) == null) {
             final FragmentTransaction trans = fm.beginTransaction();
-            final HomeSelectFragment fragment = HomeSelectFragment.newInstance(HomeSelectFragment.MODE_INITIALIZE);
+            final HomeSelectFragment fragment = HomeSelectFragment.newInstance(mode);
             trans.add(R.id.view_holder, fragment, HomeSelectFragment.TAG);
             trans.commitAllowingStateLoss();
         }
@@ -141,7 +145,7 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
         switch (itemId) {
             case R.id.menu_select_home:
                 removeGarbageDaysView();
-                showSelectHomeView();
+                showSelectHomeView(HomeSelectFragment.MODE_RE_SELECT);
                 return true;
 
             case R.id.menu_license:

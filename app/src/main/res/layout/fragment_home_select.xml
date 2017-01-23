@@ -104,7 +104,7 @@
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#80ffffff"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <Button
@@ -113,7 +113,13 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#80ffffff"
             android:text="@android:string/cancel" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/space_bw_btn"
+            android:layout_width="8dp"
+            android:layout_height="1dp" />
 
         <Button
             android:id="@+id/btn_ok"
@@ -121,6 +127,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#80ffffff"
             android:text="@android:string/ok" />
 
     </LinearLayout>

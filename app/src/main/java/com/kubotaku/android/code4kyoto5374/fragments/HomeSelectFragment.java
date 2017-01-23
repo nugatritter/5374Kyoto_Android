@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.Space;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,6 +149,8 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
             requestPermissions();
         }
 
+        getActivity().setTitle("地域の設定");
+
         loadHomePlace();
         setupViews();
     }
@@ -171,6 +174,8 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
         btnCancel.setOnClickListener(onClickCancelBtnListener);
         if (mode == MODE_INITIALIZE) {
             btnCancel.setVisibility(View.GONE);
+
+            view.findViewById(R.id.space_bw_btn).setVisibility(View.GONE);
         }
     }
 
