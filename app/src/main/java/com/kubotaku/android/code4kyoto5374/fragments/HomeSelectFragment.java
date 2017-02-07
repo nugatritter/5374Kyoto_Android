@@ -51,6 +51,7 @@ import com.kubotaku.android.code4kyoto5374.R;
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
 import com.kubotaku.android.code4kyoto5374.data.AreaMaster;
 import com.kubotaku.android.code4kyoto5374.data.HomePlace;
+import com.kubotaku.android.code4kyoto5374.util.AlarmService;
 import com.kubotaku.android.code4kyoto5374.util.AreaUtil;
 import com.kubotaku.android.code4kyoto5374.util.Prefs;
 import com.kubotaku.android.code4kyoto5374.widget.GarbageCollectDayWidget;
@@ -377,6 +378,7 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
                 onCloseFragmentListener.onCloseFragment(HomeSelectFragment.this);
             }
 
+            updateAlarms();
             updateAppWidget();
         }
     };
@@ -390,6 +392,10 @@ public class HomeSelectFragment extends Fragment implements OnRequestPermissionR
             }
         }
     };
+
+    private void updateAlarms() {
+        AlarmService.setupAllAlarms(getContext());
+    }
 
     private void updateAppWidget() {
         Context context = getContext();

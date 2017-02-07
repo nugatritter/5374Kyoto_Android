@@ -47,6 +47,20 @@ import io.realm.RealmResults;
 public class AlarmService extends IntentService {
 
     /**
+     * 設定されている全アラームをセットアップする
+     *
+     * @param context コンテキスト
+     */
+    public static void setupAllAlarms(Context context) {
+        for (int type : GarbageType.TYPES) {
+            Alarm alarm = Prefs.loadAlarm(context, type);
+            if (alarm.enable) {
+                AlarmService.setupAlarm(context, type);
+            }
+        }
+    }
+
+    /**
      * 通知アラームを設定する
      *
      * @param context     コンテキスト
@@ -161,6 +175,7 @@ public class AlarmService extends IntentService {
     public static Intent createIntent(Context context, final int garbageType) {
         Intent intent = new Intent(context, AlarmService.class);
         intent.putExtra(PARAM_GARBAGE_TYPE, garbageType);
+        intent.setType("garbageType" + garbageType);
         return intent;
     }
 

@@ -19,9 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.kubotaku.android.code4kyoto5374.data.Alarm;
-import com.kubotaku.android.code4kyoto5374.data.GarbageType;
-
 /**
  * 端末起動イベント受信レシーバー
  */
@@ -29,15 +26,6 @@ import com.kubotaku.android.code4kyoto5374.data.GarbageType;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        startGarbageAlarms(context);
-    }
-
-    private void startGarbageAlarms(final Context context) {
-        for (int type : GarbageType.TYPES) {
-            Alarm alarm = Prefs.loadAlarm(context, type);
-            if (alarm.enable) {
-                AlarmService.setupAlarm(context, type);
-            }
-        }
+        AlarmService.setupAllAlarms(context);
     }
 }
