@@ -34,6 +34,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import ix.Ix;
 
 /**
  * ゴミ収集日表示ウィジェット用表示処理サービス
@@ -180,6 +181,12 @@ public class GarbageCollectDayWidgetService extends RemoteViewsService {
                 small.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.smallDays);
                 small.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_SMALL);
                 garbageCollectDayList.add(small);
+
+                Ix<GarbageCollectDay> seq = Ix.from(garbageCollectDayList);
+
+                garbageCollectDayList =
+                        seq.orderBy(g -> AppUtil.calcNearestDaysAfter(g.days, 8, 0, false))
+                                .toList();
             }
 
             realm.close();

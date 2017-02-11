@@ -48,6 +48,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import ix.Ix;
 
 /**
  * ごみ収集日表示画面Fragment
@@ -146,6 +147,12 @@ public class GarbageCollectDaysFragment extends Fragment
             small.days = GarbageCollectDay.GarbageDaysForViews.newList(areaDays.smallDays);
             small.alarm = Prefs.loadAlarm(context, GarbageType.TYPE_SMALL);
             garbageCollectDayList.add(small);
+
+            Ix<GarbageCollectDay> seq = Ix.from(garbageCollectDayList);
+
+            garbageCollectDayList =
+                    seq.orderBy(g -> AppUtil.calcNearestDaysAfter(g.days, 8, 0, false))
+                            .toList();
         }
     }
 
