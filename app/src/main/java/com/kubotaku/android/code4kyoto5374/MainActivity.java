@@ -17,6 +17,8 @@ package com.kubotaku.android.code4kyoto5374;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -43,6 +45,8 @@ import io.realm.Realm;
  */
 public class MainActivity extends BaseActivity implements OnCloseFragmentListener {
 
+    private boolean initialized = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +67,14 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     }
 
     private void initialize() {
+        if (initialized) {
+            showSelectHomeViewIfNeeded();
+            return;
+        }
+
         enabledProgress(true);
         new InitDatabaseTask().execute();
+        initialized = true;
     }
 
     private void showSelectHomeViewIfNeeded() {
@@ -170,42 +180,59 @@ public class MainActivity extends BaseActivity implements OnCloseFragmentListene
     // --------------------------------------
 
 
-    private class InitDatabaseTask extends AsyncTask<Void, Void, Boolean> {
+    private class InitDatabaseTask extends AsyncTask<Void, String, Boolean> {
+
+        private Handler handler;
+
+        private TextView msgTextView;
 
         public InitDatabaseTask() {
-            TextView initText = (TextView) findViewById(R.id.text_init);
-            initText.setVisibility(View.VISIBLE);
+            handler = new Handler(Looper.getMainLooper());
+            msgTextView = (TextView) findViewById(R.id.text_init);
+            msgTextView.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            // for test
-            {
-                final Realm realm = Realm.getDefaultInstance();
-
-                // initialize all data
-                realm.beginTransaction();
-                realm.deleteAll();
-                realm.commitTransaction();
-                realm.close();
-            }
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onProgressUpdate("データを確認しています");
+                }
+            });
 
             final DatabaseCreator databaseCreator = new DatabaseCreator(MainActivity.this);
-            return databaseCreator.createDatabase();
+            final boolean needUpdate = databaseCreator.checkNeedUpdate();
+            if (needUpdate) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onProgressUpdate("データを取得しています");
+                    }
+                });
+
+                return databaseCreator.createDatabase();
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            msgTextView.setText(values[0]);
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             enabledProgress(false);
 
-            TextView initText = (TextView) findViewById(R.id.text_init);
-            initText.setVisibility(View.GONE);
+            msgTextView.setVisibility(View.GONE);
 
             if (result) {
                 showSelectHomeViewIfNeeded();
             } else {
-                Toast toast = Toast.makeText(MainActivity.this, "データの読み込みに失敗しました...。再起動して下さい", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(MainActivity.this, R.string.msg_failed_data_import, Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
 

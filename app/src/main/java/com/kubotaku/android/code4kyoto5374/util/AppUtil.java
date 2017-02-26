@@ -19,20 +19,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.kubotaku.android.code4kyoto5374.data.GarbageCollectDay;
-import com.kubotaku.android.code4kyoto5374.data.GarbageDays;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
 
 import static java.util.Calendar.DAY_OF_WEEK;
 import static java.util.Calendar.DAY_OF_WEEK_IN_MONTH;
@@ -82,41 +74,6 @@ public class AppUtil {
         }
 
         return sb.toString();
-    }
-
-    public interface GitHubUserContent {
-        @GET("/{owner}/{repo}/{branch}/{path}")
-        Call<String> getRawData(@Path("owner") String owner, @Path("repo") String repo, @Path("branch") String branch, @Path("path") String path);
-    }
-
-    /**
-     * GitHubからファイルのRawデータを取得する
-     *
-     * @param owner  リポジトリオーナー名
-     * @param repo   リポジトリ名
-     * @param branch ブランチ名
-     * @param path   ファイルへのパス
-     * @return Rawデータ文字列
-     * @throws Exception
-     */
-    public static String readFileFromGitHub(String owner, String repo, String branch, String path) throws Exception {
-
-        final Retrofit retrofit
-                = new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com")
-                .addConverterFactory(new ToStringConverterFactory())
-                .build();
-
-        final GitHubUserContent service = retrofit.create(GitHubUserContent.class);
-
-        final Call<String> rawData = service.getRawData(owner, repo, branch, path);
-
-        final Response<String> response = rawData.execute();
-        if (!response.isSuccessful()) {
-            throw new Exception();
-        }
-
-        return response.body();
     }
 
     /**

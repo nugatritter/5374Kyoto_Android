@@ -15,8 +15,13 @@
  */
 package com.kubotaku.android.code4kyoto5374.util;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.kubotaku.android.code4kyoto5374.data.AreaDays;
 import com.kubotaku.android.code4kyoto5374.data.AreaMaster;
+import com.kubotaku.android.code4kyoto5374.util.github.CommitHistory;
+import com.kubotaku.android.code4kyoto5374.util.github.DataSourceAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +50,55 @@ public class AreaDataReader {
 
     private List<AreaDays> areaDaysList;
 
+    /**
+     * GitHubのリポジトリが更新されているかチェックする
+     *
+     * @return 更新有無
+     */
+    public static boolean checkUpdate(Context context) {
+        boolean updated = false;
+
+        try {
+            final String latestUpdate = Prefs.loadGitHubLatestUpdate(context);
+
+            final String latestSHA = Prefs.loadGitHubLatestSHA(context);
+
+            final List<CommitHistory> commitHistory
+                    = DataSourceAccessor.getCommitHistory(GITHUB_OWNER, GITHUB_REPO, latestUpdate);
+
+            if ((commitHistory != null) && (commitHistory.size() != 0)) {
+                // 1件以上取得できる
+                // 1件目のSHAが保存済みのものと異なっていれば更新ありとみなす
+                final CommitHistory latestCommit = commitHistory.get(0);
+                if (!latestCommit.sha.equals(latestSHA)) {
+                    updated = true;
+
+                    // 情報更新
+                    Prefs.saveGitHubLatestUpdate(context, latestCommit.commit.author.date);
+                    Prefs.saveGitHubLatestSHA(context, latestCommit.sha);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            updated = false;
+        }
+
+        return updated;
+    }
+
+    /**
+     * GitHub上のCSVファイルから地域データを取得
+     *
+     * @return 成否
+     */
     public boolean importAreaData() {
 
         boolean ret = true;
 
         try {
             // 地域マスター情報
-            String areaMasterContent = AppUtil.readFileFromGitHub(GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, GITHUB_AREA_MASTER);
+            String areaMasterContent = DataSourceAccessor.readFileFromGitHub(GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, GITHUB_AREA_MASTER);
             String[] sepAreaMaster = areaMasterContent.split("\n");
 
             areaMasterList = new ArrayList<>();
@@ -61,7 +108,7 @@ public class AreaDataReader {
             }
 
             // 区域別ごみ収集日情報
-            String areaDaysContent = AppUtil.readFileFromGitHub(GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, GITHUB_AREA_DAYS);
+            String areaDaysContent = DataSourceAccessor.readFileFromGitHub(GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, GITHUB_AREA_DAYS);
             String[] sepAreaDays = areaDaysContent.split("\n");
 
             areaDaysList = new ArrayList<>();
@@ -80,6 +127,11 @@ public class AreaDataReader {
         return ret;
     }
 
+    /**
+     * 取得した地域データをローカルのDBに保存する
+     *
+     * @return
+     */
     public boolean saveAreaData() {
         boolean ret = true;
 

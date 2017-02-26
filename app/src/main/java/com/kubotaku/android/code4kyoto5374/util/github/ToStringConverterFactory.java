@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kubotaku.android.code4kyoto5374.util;
+package com.kubotaku.android.code4kyoto5374.util.github;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

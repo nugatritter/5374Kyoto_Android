@@ -44,4 +44,5 @@ dependencies {
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.github.akarnokd:ixjava:1.0.0-RC5'
     testCompile 'junit:junit:4.12'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 }

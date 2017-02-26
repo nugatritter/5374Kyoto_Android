@@ -13,4 +13,5 @@
     <string name="text_exist_multi_choice">複数の結果がありました。以下から選択して下さい。</string>
     <string name="text_selected_area_info">選択された地域の情報</string>
     <string name="text_please_select_area">お住いの地域を選択してください</string>
+    <string name="msg_failed_data_import">データの読み込みに失敗しました...。再起動して下さい</string>
 </resources>

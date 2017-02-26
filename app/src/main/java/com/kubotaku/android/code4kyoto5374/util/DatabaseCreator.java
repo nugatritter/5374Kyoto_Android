@@ -42,33 +42,27 @@ public class DatabaseCreator {
         this.context = context;
     }
 
+
+    public boolean checkNeedUpdate() {
+        if (!needUpdate() && checkExistDatabase()) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * データベースを生成する.
      *
      * @return 成否
      */
     public boolean createDatabase() {
-        return createDatabaseIfNeeded();
-    }
-
-    /**
-     * データベースを生成する.
-     * <p>
-     * データが保存されていない場合
-     * </p>
-     *
-     * @return 成否
-     */
-    private boolean createDatabaseIfNeeded() {
         boolean ret = true;
 
-        realm = Realm.getDefaultInstance();
-
-        if (isExistDatabase()) {
-            return ret;
-        }
-
         try {
+            realm = Realm.getDefaultInstance();
+
+            deleteAllData();
+
             // ごみ収集日情報の取得と保存
             final AreaDataReader areaDataReader = new AreaDataReader();
             if (areaDataReader.importAreaData()) {
@@ -90,9 +84,14 @@ public class DatabaseCreator {
             deleteAllData();
         } finally {
             realm.close();
+            realm = null;
         }
 
         return ret;
+    }
+
+    private boolean needUpdate() {
+        return AreaDataReader.checkUpdate(context);
     }
 
     /**
@@ -100,10 +99,21 @@ public class DatabaseCreator {
      *
      * @return
      */
-    private boolean isExistDatabase() {
+    private boolean checkExistDatabase() {
+        boolean createInstance = false;
+        if (this.realm == null) {
+            realm = Realm.getDefaultInstance();
+            createInstance = true;
+        }
+
         final long areaDaysCount = realm.where(AreaDays.class).count();
         final long areaMasterCount = realm.where(AreaMaster.class).count();
         final long garbageDataCount = realm.where(GarbageData.class).count();
+
+        if (createInstance) {
+            realm.close();
+            realm = null;
+        }
 
         if ((areaDaysCount == 0) || (areaMasterCount == 0) || (garbageDataCount == 0)) {
             return false;
@@ -128,6 +138,7 @@ public class DatabaseCreator {
 
         if (createInstance) {
             realm.close();
+            realm = null;
         }
     }
 

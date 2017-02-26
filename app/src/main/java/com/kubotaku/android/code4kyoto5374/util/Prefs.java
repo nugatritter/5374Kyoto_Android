@@ -45,6 +45,58 @@ public class Prefs {
 
     private static final String KEY_ALARM_ENABLE = "key_alarm_enable_";
 
+    private static final String KEY_GITHUB_LATEST_UPDATE = "key_github_latest_update";
+
+    private static final String KEY_GITHUB_LATEST_SHA = "key_github_latest_sha";
+
+    /**
+     * GitHub（エリア情報）の最終更新コミットのSHAを保存する
+     *
+     * @param context コンテキスト
+     * @param sha     最終更新コミットのSHA
+     */
+    public static void saveGitHubLatestSHA(Context context, final String sha) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_GITHUB_LATEST_SHA, sha);
+        editor.apply();
+    }
+
+    /**
+     * GitHub(エリア情報)の最終更新コミットのSHAを読み込む
+     *
+     * @param context コンテキスト
+     * @return SHA
+     */
+    public static String loadGitHubLatestSHA(Context context) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+        return prefs.getString(KEY_GITHUB_LATEST_SHA, "");
+    }
+
+    /**
+     * GitHub（エリア情報）の最終更新日時を保存する
+     *
+     * @param context コンテキスト
+     * @param date    最終更新日時(ISO 8601形式)
+     */
+    public static void saveGitHubLatestUpdate(Context context, final String date) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_GITHUB_LATEST_UPDATE, date);
+        editor.apply();
+    }
+
+    /**
+     * GitHub(エリア情報)の最終更新日時を読み込む
+     *
+     * @param context コンテキスト
+     * @return 最終更新日時
+     */
+    public static String loadGitHubLatestUpdate(Context context) {
+        final SharedPreferences prefs = getPrefs(context, PREFS_NAME);
+        return prefs.getString(KEY_GITHUB_LATEST_UPDATE, "2017-02-01T00:00");
+    }
+
 
     /**
      * 通知設定を保存する
