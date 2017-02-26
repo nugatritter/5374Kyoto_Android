@@ -157,7 +157,7 @@ public class AppUtil {
     public static int calcNearestDaysAfter(List<GarbageCollectDay.GarbageDaysForViews> daysList, final int targetHour, final int targetMinute, final boolean ignoreToday) {
 
         final Calendar calendar = Calendar.getInstance();
-        final int todayDayOfWeekInMonth = calendar.get(DAY_OF_WEEK_IN_MONTH);
+        final int todayWeekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
         final int todayDayOfWeek = calendar.get(DAY_OF_WEEK);
 
         boolean beforeTargetTime = isBeforeTargetTime(targetHour, targetMinute);
@@ -165,7 +165,7 @@ public class AppUtil {
             beforeTargetTime = false;
         }
 
-        int nearestDaysAfter = 31;
+        int nearestDaysAfter = 60;
         for (GarbageCollectDay.GarbageDaysForViews days : daysList) {
 
             int day = days.day;
@@ -173,13 +173,15 @@ public class AppUtil {
 
             int diffWeek = 0;
             if (week != -1) {
-                if (todayDayOfWeekInMonth <= week) {
-                    diffWeek = (week - todayDayOfWeekInMonth);
+                if ((todayWeekOfMonth < week) ||
+                        ((todayWeekOfMonth == week) && (todayDayOfWeek < day)) ||
+                        ((todayWeekOfMonth == week) && (todayDayOfWeek == day) && beforeTargetTime)) {
+                    diffWeek = (week - todayWeekOfMonth);
                 } else {
                     final int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
                     calendar.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
-                    final int maxWeekInMonth = calendar.getActualMaximum(DAY_OF_WEEK_IN_MONTH);
-                    diffWeek = (maxWeekInMonth - todayDayOfWeekInMonth) + week - 1;
+                    final int maxWeekInMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+                    diffWeek = (maxWeekInMonth - todayWeekOfMonth) + week - 1;
                 }
             }
 

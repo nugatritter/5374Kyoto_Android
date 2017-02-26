@@ -25,6 +25,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.kubotaku.android.code4kyoto5374.R;
 import com.kubotaku.android.code4kyoto5374.data.Alarm;
@@ -37,6 +38,7 @@ import com.kubotaku.android.code4kyoto5374.data.HomePlace;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -45,6 +47,8 @@ import io.realm.RealmResults;
  * アラーム（Notification通知）サービスクラス
  */
 public class AlarmService extends IntentService {
+
+    private static final String TAG = AlarmService.class.getSimpleName();
 
     /**
      * 設定されている全アラームをセットアップする
@@ -119,8 +123,9 @@ public class AlarmService extends IntentService {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
         final String time = sdf.format(calendar.getTime());
+        Log.i(TAG, String.format(Locale.getDefault(), "Set up alarm at %s", time));
 
         final long triggerMillis = calendar.getTimeInMillis();
         setupAlarm(context, pendingIntent, triggerMillis);
