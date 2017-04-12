@@ -17,6 +17,7 @@ package com.kubotaku.android.code4kyoto5374.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.kubotaku.android.code4kyoto5374.data.GarbageCollectDay;
 
@@ -24,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.Calendar.DAY_OF_WEEK;
@@ -156,45 +158,61 @@ public class AppUtil {
      */
     public static int calcNearestDaysAfter(List<GarbageCollectDay.GarbageDaysForViews> daysList, final int targetHour, final int targetMinute, final boolean ignoreToday) {
 
-        final Calendar calendar = Calendar.getInstance();
-        final int todayWeekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
-        final int todayDayOfWeek = calendar.get(DAY_OF_WEEK);
-
         boolean beforeTargetTime = isBeforeTargetTime(targetHour, targetMinute);
         if (ignoreToday) {
             beforeTargetTime = false;
         }
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        final Date today = calendar.getTime();
+        final long todayMillis = today.getTime();
+
         int nearestDaysAfter = 60;
         for (GarbageCollectDay.GarbageDaysForViews days : daysList) {
+
+            // clear calendar instance.
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
 
             int day = days.day;
             int week = days.week;
 
-            int diffWeek = 0;
-            if (week != -1) {
-                if ((todayWeekOfMonth < week) ||
-                        ((todayWeekOfMonth == week) && (todayDayOfWeek < day)) ||
-                        ((todayWeekOfMonth == week) && (todayDayOfWeek == day) && beforeTargetTime)) {
-                    diffWeek = (week - todayWeekOfMonth);
-                } else {
-                    final int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    calendar.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
-                    final int maxWeekInMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
-                    diffWeek = (maxWeekInMonth - todayWeekOfMonth) + week - 1;
-                }
-            }
-
             int diff;
-            if (((todayDayOfWeek < day) && (diffWeek == 0)) ||
-                    ((todayDayOfWeek == day) && (diffWeek == 0) && beforeTargetTime)) {
-                diff = day - todayDayOfWeek;
-            } else if ((todayDayOfWeek == day) && (diffWeek == 0) && !beforeTargetTime) {
-                diff = 7;
-            } else if ((todayDayOfWeek > day) && (diffWeek == 0)) {
-                diff = 7 + (day - todayDayOfWeek);
+
+            // set target date
+            calendar.set(Calendar.DAY_OF_WEEK, day);
+            if (week != -1) {
+                calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, week);
+            }
+            Date targetDate = calendar.getTime();
+            long targetDateMillis = targetDate.getTime();
+
+            long diffMillis = targetDateMillis - todayMillis;
+            if ((diffMillis > 0) || ((diffMillis == 0) && beforeTargetTime)) {
+                // today(current time) is before target date(and target time).
+                diff = (int) (diffMillis / (24 * 60 * 60 * 1000));
             } else {
-                diff = (7 * diffWeek) + day - todayDayOfWeek;
+                // today(current time) is after target date(and target time)
+                // set next garbage date.
+                if (week != -1) {
+                    calendar.add(Calendar.MONTH, 1);
+                    calendar.set(Calendar.DAY_OF_WEEK, day);
+                    calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, week);
+                } else {
+                    calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                    calendar.set(Calendar.DAY_OF_WEEK, day);
+                }
+                targetDate = calendar.getTime();
+                targetDateMillis = targetDate.getTime();
+                diffMillis = targetDateMillis - todayMillis;
+                diff = (int) (diffMillis / (24 * 60 * 60 * 1000));
             }
 
             if ((diff >= 0) && (nearestDaysAfter > diff)) {
