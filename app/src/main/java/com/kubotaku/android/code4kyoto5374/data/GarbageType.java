@@ -156,7 +156,8 @@ public class GarbageType extends RealmObject {
     public static final int[] TYPES = {
             TYPE_NO,
             TYPE_BURNABLE,
-            TYPE_PLACE,
+            TYPE_BIN,
+            TYPE_PLASTIC,
             TYPE_SMALL,
             TYPE_BIG,
             TYPE_PLACE,
