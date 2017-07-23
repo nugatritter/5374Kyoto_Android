@@ -65,6 +65,17 @@ public class AlarmService extends IntentService {
     }
 
     /**
+     * 全アラームをキャンセルする
+     *
+     * @param context コンテキスト
+     */
+    public static void cancelAllAlarms(Context context) {
+        for (int type : GarbageType.TYPES) {
+            AlarmService.cancelAlarm(context, type);
+        }
+    }
+
+    /**
      * 通知アラームを設定する
      *
      * @param context     コンテキスト

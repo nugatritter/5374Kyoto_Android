@@ -52,6 +52,15 @@
             </intent-filter>
         </receiver>
 
+        <!-- アプリアップデート時アラーム再設定用レシーバー -->
+        <receiver
+            android:name=".util.UpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <!-- ごみ回収日ウィジェット -->
         <receiver android:name=".widget.GarbageCollectDayWidget">
             <intent-filter>
