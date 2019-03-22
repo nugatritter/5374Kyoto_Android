@@ -46,7 +46,7 @@ import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
 /**
- * 暗号化・復号化処理ユーティリティクラス
+ * Encryption / decryption utility class
  */
 
 public class EncryptUtil {
@@ -62,14 +62,14 @@ public class EncryptUtil {
     private static final String ALGORITHM = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
 
     /**
-     * 指定の文字列を暗号化（+ Base64化）する。
+     * Encrypts the specified string（+Base64)
      * <p>
-     * ただし、API Level 18以降のみ有効。それ以前の端末ではもとの文字列がそのまま返る
+     * However, it is valid only for API Level 18 and later. Previous versions returns the original string as it is
      * </p>
      *
-     * @param context   コンテキスト
-     * @param plainText 文字列
-     * @return 暗号化（+ Base64化）された文字列
+     * @param context   Context
+     * @param plainText String
+     * @return Encrypted (+Base64) strings
      */
     public static String encryptString(@NonNull Context context, @NonNull final String plainText) {
         if (plainText == null) {
@@ -84,14 +84,14 @@ public class EncryptUtil {
     }
 
     /**
-     * 暗号化された文字列を複合する。
+     * Compound the encrypted string.
      * <p>
-     * ただし、API Level 18以降のみ有効。それ以前の端末ではもとの文字列がそのまま返る
+     * However, it is valid only for API Level 18 and later.Previous terminal returns the original string as it is
      * </p>
      *
-     * @param context       コンテキスト
-     * @param encryptedText 暗号化された文字列
-     * @return 複合された文字列
+     * @param context       Context
+     * @param encryptedText String
+     * @return Compound strings
      */
     public static String decryptString(@NonNull Context context, @NonNull final String encryptedText) {
         if (encryptedText == null) {
